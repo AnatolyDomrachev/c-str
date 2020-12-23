@@ -16,3 +16,4 @@ void delete_words(int, int_pchar*);
     qwe asdf
 
 
+qwe'\0'asdf'\0'zxcvb'\0'
