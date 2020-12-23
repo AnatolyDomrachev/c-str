@@ -1,19 +1,19 @@
-void input_str(char*);
-    qwe asdf zxcvb
+* void input_str(char*);  
+    qwe asdf zxcvb  
 
-void work(char*, char* );
-    qwe asdf
+* void work(char*, char* );  
+    qwe asdf  
 
-void arr_int(char*, int_pchar*);
-    3 qwe
-    4 asdf
-    5 zxcvb
+* void arr_int(char*, int_pchar*);  
+    3 qwe  
+    4 asdf  
+    5 zxcvb  
 
-int f_max_s(int_pchar*);
-    5
+* int f_max_s(int_pchar*);  
+    5  
 
-void delete_words(int, int_pchar*);
-    qwe asdf
+* void delete_words(int, int_pchar*);  
+    qwe asdf  
 
 
 qwe'\0'asdf'\0'zxcvb'\0'
