@@ -22,6 +22,7 @@ int main()
     char str_in[MAX_SIZE_STR];
 
     int ch;
+    char c;
     int size;
     while(1)
     {
@@ -33,6 +34,7 @@ int main()
             break;
 
         while ((ch = getchar()) != '\n' && ch != EOF) ;
+
         printf("\n\n");
     }
 
