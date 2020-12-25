@@ -5,17 +5,8 @@
 #include <string.h>
 #include <stdio.h>
 
-char text_out[MAX_NUM_WORD][MAX_SIZE_WORD];
-
-struct
-{
-    char str[MAX_SIZE_WORD][MAX_SIZE_WORD];
-    int num;
-} info[MAX_NUM_WORD];
-
-char text_in[MAX_NUM_WORD][MAX_SIZE_WORD];
+char text[MAX_NUM_WORD][MAX_SIZE_WORD];
 int word_in_text;
-int num_str;
 
 struct int_pchar
 {
@@ -30,13 +21,10 @@ int f_max_s(int , int_pchar*);
 void delete_words(int, int, int_pchar*);
 void str_to_text(int, int_pchar*);
 void print_result();
-void get_info(int, int, int_pchar*);
-void print_info();
 
 int main()
 {
     word_in_text = 0;
-    num_str = 0;
     char str_in[MAX_SIZE_STR];
 
     int ch;
@@ -49,20 +37,17 @@ int main()
 
         str_in[0] = '\0';
 
-        size = input_str(text_in[num_str]);
+        size = input_str(str_in);
         if( size  != 0)
-            num_str++;
+        {
+            work(str_in);
+            word_in_text++;
+        }
         else
             break;
+
     }
 
-    for(int i=0; i<num_str; i++)
-    {
-            work(text_in[i]);
-            word_in_text++;
-    }
-
-    print_info();
     print_result();
 
     return 0;
@@ -89,9 +74,6 @@ void work(char* str_in)
 
     arr_s = arr_int(str_in, arr);
     max_s = f_max_s(arr_s, arr);
-
-    get_info(max_s, arr_s, arr);
-
     delete_words( arr_s, max_s, arr);
     str_to_text(arr_s, arr);
 }
@@ -147,7 +129,7 @@ void str_to_text(int size, int_pchar* arr)
     for(int i=0; i<size;i++)
         if(arr[i].size != 0)
         {
-            sprintf( &text_out[word_in_text][pass], "%s ", arr[i].word);
+            sprintf( &text[word_in_text][pass], "%s ", arr[i].word);
             pass += strlen(arr[i].word)+1; 
         }
 }
@@ -155,40 +137,5 @@ void str_to_text(int size, int_pchar* arr)
 void print_result()
 {
     for(int i =0 ; i<= word_in_text; i++)
-        printf("%s\n", text_out[i]);
-}
-
-void get_info(int maxs, int num, int_pchar* arr)
-{
-    int count;
-    int pass =0;
-    int inf_num = 0;
-
-    for(int i=1 ; i<=maxs; i++)
-    {
-        count = 0;
-
-        for(int j=0 ; j<num; j++)
-            if(arr[j].size == i)
-                count++;
-
-        if(count != 0)
-        {
-            sprintf(info[word_in_text].str[inf_num], "slov razmerom %d %d shtuk ; ", i, count);
-            info[word_in_text].num++;
-            inf_num++;
-        }
-    }
-}
-
-void print_info()
-{
-    for(int i =0 ; i<= word_in_text; i++)
-    {
-        printf("\n");
-        for(int j=0; j<info[i].num; j++)
-            printf("%s ", info[i].str[j]);
-    }
-    
-    printf("\n");
+        printf("%s\n", text[i]);
 }
