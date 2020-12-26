@@ -10,12 +10,11 @@
 double str_time;
 clock_t start_t, end_t, total_t;
 
-struct info_str
+struct
 {
-    int w_size[MAX_NUM_WORD];
-    int w_num[MAX_NUM_WORD];
+    char str[MAX_SIZE_WORD][MAX_SIZE_WORD];
     int num;
-} ;
+} info[MAX_NUM_WORD];
 
 struct int_pchar
 {
@@ -24,14 +23,14 @@ struct int_pchar
 };
 
 int input_str(char*);
-int work(char*, char*, int, int_pchar*, info_str* );
+int work(char*, char*, int, int_pchar* );
 int arr_int(char*, int_pchar*);
 int f_max_s(int , int_pchar*);
 void delete_words(int, int, int_pchar*);
 //void str_to_text(int, int_pchar*, char*);
 void print_result(int, int_pchar[][MAX_NUM_WORD], int*);
-void get_info(int, int, int_pchar*, int, info_str*);
-void print_info(int, info_str*);
+void get_info(int, int, int_pchar*, int);
+void print_info(int);
 
 int main()
 {
@@ -43,8 +42,8 @@ int main()
 
     char str_in[MAX_SIZE_STR];
     int_pchar arr[MAX_NUM_STR][MAX_NUM_WORD];
-    info_str info[MAX_NUM_STR];
     int arr_num[MAX_NUM_STR];
+
 
     int ch;
     char c;
@@ -65,11 +64,11 @@ int main()
 
     for(int i=0; i<num_str; i++)
     {
-            arr_num[i] = work(text_in[i],text_out[i], word_in_text, arr[word_in_text], &info[word_in_text]);
+            arr_num[i] = work(text_in[i],text_out[i], word_in_text, arr[word_in_text]);
             word_in_text++;
     }
 
-    print_info(word_in_text, info);
+    print_info(word_in_text);
     print_result(word_in_text, arr, arr_num);
 
     printf("\n\ntime my_strlen: %lf \n", str_time);
@@ -101,7 +100,7 @@ int input_str(char* str)
     return len;
 }
 
-int work(char* str_in, char* text_out, int word_in_text, int_pchar* arr, info_str* info)
+int work(char* str_in, char* text_out, int word_in_text, int_pchar* arr)
 {
     int max_s;
     int arr_s;
@@ -109,7 +108,7 @@ int work(char* str_in, char* text_out, int word_in_text, int_pchar* arr, info_st
     arr_s = arr_int(str_in, arr);
     max_s = f_max_s(arr_s, arr);
 
-    get_info(max_s, arr_s, arr, word_in_text, info);
+    get_info(max_s, arr_s, arr, word_in_text);
 
     delete_words( arr_s, max_s, arr);
     //str_to_text(arr_s, arr, text_out);
@@ -190,7 +189,7 @@ void print_result(text, num)
 }
 */
 
-void get_info(int maxs, int num, int_pchar* arr, int word_in_text, info_str* info)
+void get_info(int maxs, int num, int_pchar* arr, int word_in_text)
 {
     int count;
     int pass =0;
@@ -206,21 +205,20 @@ void get_info(int maxs, int num, int_pchar* arr, int word_in_text, info_str* inf
 
         if(count != 0)
         {
-            info->w_size[inf_num] = i;
-            info->w_num[inf_num] = count;
-            info->num++;
+            sprintf(info[word_in_text].str[inf_num], "slov razmerom %d %d shtuk ; ", i, count);
+            info[word_in_text].num++;
             inf_num++;
         }
     }
 }
 
-void print_info(int word_in_text, info_str* info)
+void print_info(int word_in_text)
 {
     for(int i =0 ; i<= word_in_text; i++)
     {
         printf("\n");
         for(int j=0; j<info[i].num; j++)
-            printf("slov razmerom %d %d shtuk ; ", info[i].w_size[j], info[i].w_num[j]);
+            printf("%s ", info[i].str[j]);
     }
     
     printf("\n");
