@@ -26,7 +26,7 @@ struct int_pchar
 };
 
 int input_str(char*); // Вввод исходной строки
-int work(char*, char*, int, struct int_pchar*, struct info_str* ); //Обработка исходной строки
+int work(char*, int, struct int_pchar*, struct info_str* ); //Обработка исходной строки
 int arr_int(char*, struct int_pchar*); //Формирование массив структур int_pchar на основе исходной строки. Каждое слово строки - один элемент массива
 int f_max_s(int , struct int_pchar*); //Нахождение размера самого длинного слова в массиве структур int_pchar
 void delete_words(int, int, struct int_pchar*);// Зануление размеров у самых длинных слов в массиве int_pchar
@@ -37,26 +37,21 @@ void print_info(int, struct info_str*);//Печать информации об 
 
 int main()
 {
-    str_time = 0;
-    char text_out[MAX_NUM_WORD][MAX_SIZE_WORD];
-    char text_in[MAX_NUM_WORD][MAX_SIZE_WORD];
-    int word_in_text = 0;
-    int num_str = 0;
+    str_time = 0;   
+    char text_in[MAX_NUM_WORD][MAX_SIZE_WORD]; // массив входных строк 
+    int str_in_text = 0; // Сколько строк ввёл пользователь
+    int num_str = 0; // Номер обрабатываемой строки в циклах в функции main
 
-    char str_in[MAX_SIZE_STR];
-    struct int_pchar arr[MAX_NUM_STR][MAX_NUM_WORD];
-    struct info_str info[MAX_NUM_STR];
-    int arr_num[MAX_NUM_STR];
+    struct int_pchar arr[MAX_NUM_STR][MAX_NUM_WORD]; // Массив массив структур int_pchar на основе исходной строки. Каждое слово строки - один элемент массива
 
-    int ch;
-    char c;
-    int size;
-    int i = 0;
+    struct info_str info[MAX_NUM_STR]; // в массив info_str, по одному элементу на каждую строку. С информацией сколько слов в строке какой длинны
+    int arr_num[MAX_NUM_STR]; // Массив, содержащий число слов в исходноых строках
 
-    while(1)
+    int size; // размер строки, которую ввёл пользователь
+
+    while(1) // Бесконечный цикл заполняющий text_in
     {
-
-        str_in[0] = '\0';
+        text_in[num_str][0] = '\0'; //Зануляем размер строки, которую сейчас будет вводить пользователь
 
         size = input_str(text_in[num_str]);
         if( size  != 0)
@@ -67,12 +62,12 @@ int main()
 
     for(int i=0; i<num_str; i++)
     {
-            arr_num[i] = work(text_in[i],text_out[i], word_in_text, arr[word_in_text], &info[word_in_text]);
-            word_in_text++;
+            arr_num[i] = work(text_in[i], i, arr[i], &info[i]);
+            str_in_text++;
     }
 
-    print_info(word_in_text, info);
-    print_result(word_in_text, arr, arr_num);
+    print_info(str_in_text, info);
+    print_result(str_in_text, arr, arr_num);
 
     printf("\n\ntime strlen: %lf \n", str_time);
     return 0;
@@ -86,7 +81,6 @@ int input_str(char* str)
 
     int ssize;
 
-
     start_t = clock();
     ssize = strlen(str);
     end_t = clock();
@@ -95,15 +89,10 @@ int input_str(char* str)
     for(int i=0; i<ssize; i++)
         if (str[i] == '\t')
             str[i] = ' ';
-
-    start_t = clock();
-    int len = strlen(str);
-    ssize = strlen(str);
-    str_time += (double)(end_t - start_t) / CLOCKS_PER_SEC;
-    return len;
+    return ssize;
 }
 
-int work(char* str_in, char* text_out, int word_in_text, struct int_pchar* arr, struct info_str* info)
+int work(char* str_in , int str_in_text, struct int_pchar* arr, struct info_str* info)
 {
     int max_s;
     int arr_s;
@@ -111,10 +100,11 @@ int work(char* str_in, char* text_out, int word_in_text, struct int_pchar* arr, 
     arr_s = arr_int(str_in, arr);
     max_s = f_max_s(arr_s, arr);
 
-    get_info(max_s, arr_s, arr, word_in_text, info);
+    get_info(max_s, arr_s, arr, str_in_text, info);
 
     delete_words( arr_s, max_s, arr);
     //str_to_text(arr_s, arr, text_out);
+    return arr_s;
 }
 
 int arr_int(char* str, struct int_pchar* arr)
@@ -170,29 +160,7 @@ void delete_words(int arr_s, int max_num, struct int_pchar* arr)
             arr[i].size = 0;
 }
 
-/*
-void str_to_text(int size, struct int_pchar* arr, char* text)
-{
-    int pass = 0;
-
-    for(int i=0; i<size;i++)
-        if(arr[i].size != 0)
-        {
-            sprintf( &text[pass], "%s ", arr[i].word);
-            pass += strlen(arr[i].word)+1; 
-        }
-}
-/*
-
-/*
-void print_result(text, num)
-{
-    for(int i =0 ; i<= word_in_text; i++)
-        printf("%s\n", text_out[i]);
-}
-*/
-
-void get_info(int maxs, int num, struct int_pchar* arr, int word_in_text, struct info_str* info)
+void get_info(int maxs, int num, struct int_pchar* arr, int str_in_text, struct info_str* info)
 {
     int count;
     int pass =0;
@@ -216,9 +184,9 @@ void get_info(int maxs, int num, struct int_pchar* arr, int word_in_text, struct
     }
 }
 
-void print_info(int word_in_text, struct info_str* info)
+void print_info(int str_in_text, struct info_str* info)
 {
-    for(int i =0 ; i<= word_in_text; i++)
+    for(int i =0 ; i<= str_in_text; i++)
     {
         printf("\n");
         for(int j=0; j<info[i].num; j++)
